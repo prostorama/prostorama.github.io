@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://prostorama.github.io/sitemap.xml
