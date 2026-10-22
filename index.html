@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Рамиль — контент и ИИ для Instagram</title>
+<meta name="description" content="Монтаж, сценарии, карусели и автоворонки под ключ. Вы снимаетесь, остальное делаю я с командой и ИИ-агентами.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Oswald:wght@200;300;700&display=swap" rel="stylesheet">
+<style>
+:root{--dust:#BFB8AD;--ink:#0A0A0A;--bone:#F6F2EB;--ash:#8F8A82;--pad:22px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,sans-serif;font-weight:300;background:var(--ink);color:var(--bone);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+/* film grain over the whole page: grey noise in soft-light keeps the average colour, so Safari's
+   tinted status/address bars (sampled from the plain background) match the grained page */
+body:after{content:'';position:fixed;inset:-30vh 0;pointer-events:none;z-index:50;opacity:.45;mix-blend-mode:soft-light;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/><feColorMatrix values='1 0 0 0 -.2  1 0 0 0 -.2  1 0 0 0 -.2  0 0 0 0 1'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.cap{font-size:11px;letter-spacing:6px;text-transform:uppercase;font-weight:300}
+.dust{background:var(--dust);color:var(--ink)}
+.dark{background:var(--ink);color:var(--bone)}
+section{position:relative;overflow:hidden;padding:110px var(--pad) 90px}
+.in{max-width:1040px;margin:0 auto;position:relative;z-index:2}
+.btn{display:block;text-align:center;padding:19px;font-size:11px;letter-spacing:7px;text-transform:uppercase;font-weight:400;transition:opacity .2s}
+.btn:hover{opacity:.75}
+.dust .btn.solid{background:var(--ink);color:var(--dust)}
+.dark .btn.line{border:1px solid var(--bone)}
+.dust .btn.line{border:1px solid var(--ink)}
+h2{font-weight:300;font-size:13px;letter-spacing:8px;text-transform:uppercase;margin-bottom:56px;display:flex;align-items:center;gap:16px}
+h2:before{content:'';width:40px;height:1px;background:currentColor}
+/* stretched condensed type, like long silhouettes */
+.tall{font-family:Oswald;font-weight:700;text-transform:uppercase;line-height:.86;transform:scaleY(1.9);transform-origin:top left;letter-spacing:-2px}
+
+/* header */
+header{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:20px var(--pad);mix-blend-mode:difference;color:#fff}
+header button{background:none;border:0;color:inherit;font:inherit;cursor:pointer}
+nav{position:fixed;inset:0;z-index:45;background:var(--ink);color:var(--bone);display:flex;flex-direction:column;justify-content:center;padding:0 var(--pad);gap:26px;opacity:0;pointer-events:none;transition:opacity .3s}
+nav.open{opacity:1;pointer-events:auto}
+nav a{font-family:Oswald;font-weight:200;font-size:44px;text-transform:uppercase;letter-spacing:2px}
+nav .x{position:absolute;top:20px;right:var(--pad)}
+
+/* 1 hero: dust */
+#top{min-height:100svh;padding-top:70px;display:flex;flex-direction:column}
+#top .in{flex:1;display:flex;flex-direction:column;width:100%}
+.hero-word{--fs:clamp(118px,32vw,260px);font-size:var(--fs);height:calc(var(--fs)*3.45)}
+.hero-list{position:absolute;top:14px;right:0;text-align:right;font-size:10.5px;line-height:1.9;letter-spacing:2px;text-transform:uppercase}
+.hero-bottom{margin-top:auto;border-top:1px solid var(--ink);padding-top:16px}
+#top h1{font-weight:300;font-size:clamp(18px,2.6vw,30px);line-height:1.4;letter-spacing:3px;text-transform:uppercase}
+#top p{font-size:13px;line-height:1.7;margin:14px 0 26px;max-width:460px;color:#3d3a35}
+
+/* 2 services: dark */
+.svc{border-top:1px solid #2a2927;padding:26px 0;display:grid;grid-template-columns:78px 1fr;gap:6px 14px}
+.svc:last-child{border-bottom:1px solid #2a2927}
+.svc .num{font-size:44px;height:84px;color:var(--bone);grid-row:span 2}
+.svc h3{font-weight:400;font-size:15px;letter-spacing:4px;text-transform:uppercase;line-height:1.4}
+.svc p{font-size:13.5px;line-height:1.7;color:var(--ash)}
+
+/* 3 how: dust */
+.step{display:grid;grid-template-columns:78px 1fr;gap:14px;padding:22px 0;border-top:1px solid var(--ink)}
+.step:last-child{border-bottom:1px solid var(--ink)}
+.step .num{font-size:40px;height:76px}
+.step p{font-size:15px;line-height:1.6;font-weight:400;align-self:center}
+
+/* 4 about: dark with vertical name */
+.vname{position:absolute;top:-20px;bottom:-20px;right:-46px;writing-mode:vertical-rl;font-family:Archivo,Oswald;font-weight:700;font-size:240px;line-height:.78;color:#1C1B19;letter-spacing:-4px;z-index:1;user-select:none}
+#about .lead{font-size:clamp(20px,3vw,30px);line-height:1.45;font-weight:300;letter-spacing:.5px;max-width:640px;margin-right:90px}
+#about .txt{font-size:14px;line-height:1.8;color:var(--ash);margin:26px 90px 0 0;max-width:560px}
+.why{margin:50px 90px 0 0;max-width:560px}
+.why div{padding:18px 0;border-top:1px solid #2a2927;font-size:14px;line-height:1.6;color:var(--ash)}
+.why div:last-child{border-bottom:1px solid #2a2927}
+.why b{display:block;font-weight:400;color:var(--bone);letter-spacing:4px;text-transform:uppercase;font-size:12px;margin-bottom:6px}
+
+/* cases: dust */
+.k-word{--fs:clamp(84px,24vw,200px);font-size:var(--fs);height:calc(var(--fs)*3.45);margin-bottom:10px}
+.case{border-top:1px solid var(--ink);padding:34px 0 40px}
+.case:last-child{border-bottom:1px solid var(--ink)}
+.case h3{font-weight:400;font-size:15px;letter-spacing:4px;text-transform:uppercase}
+.case .niche{font-size:13px;color:#3d3a35;margin:6px 0 22px;line-height:1.6}
+.stats{display:grid;gap:18px;margin-bottom:22px}
+.stat .big{font-family:Oswald;font-weight:700;white-space:nowrap;font-size:clamp(30px,8.6vw,64px);line-height:1;letter-spacing:-1px;text-transform:uppercase}
+.stat .big i{font-style:normal;font-weight:200;margin:0 6px}
+.stat .lab{font-size:10.5px;letter-spacing:3px;text-transform:uppercase;margin-top:6px;color:#3d3a35}
+.res{font-size:14px;line-height:1.7;font-weight:400;margin-bottom:22px;max-width:560px}
+.shots{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+.shots figure{flex:0 0 78%;max-width:340px;scroll-snap-align:start}
+.shots img{width:100%;display:block;border:1px solid var(--ink)}
+.shots figcaption{font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-top:8px;color:#3d3a35}
+.works{margin-top:60px}
+.w-h{font-weight:400;font-size:15px;letter-spacing:4px;text-transform:uppercase;margin-bottom:24px}
+.w-cap{font-size:10.5px;letter-spacing:3px;text-transform:uppercase;color:#3d3a35;margin:22px 0 12px}
+.reel-row{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+.reel-row figure{flex:0 0 62%;max-width:300px;scroll-snap-align:start}
+.reel-row video{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;background:#000;cursor:pointer}
+.reel-row figcaption{font-size:10px;letter-spacing:3px;line-height:1.6;text-transform:uppercase;margin-top:8px;color:#3d3a35}
+.anim video{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000;cursor:pointer}
+.logo-row{display:grid;gap:10px}
+.logo-row video{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000}
+.w-tip{font-size:11px;color:#3d3a35;margin-top:14px}
+@media (min-width:860px){.logo-row{grid-template-columns:repeat(3,1fr)}.reel-row figure{flex-basis:260px}}
+.k-note{font-size:13px;line-height:1.7;margin-top:30px;max-width:520px;color:#3d3a35;font-style:italic}
+#prices.dark .p-txt{color:var(--ash)}
+@media (min-width:860px){.stats{grid-template-columns:1fr 1fr}.shots figure{flex-basis:300px}}
+
+/* 5 prices: dust */
+.p-word{--fs:clamp(84px,24vw,200px);font-size:var(--fs);height:calc(var(--fs)*3.45);margin-bottom:24px}
+#prices .p-lead{font-size:clamp(20px,3vw,30px);line-height:1.4;font-weight:300;max-width:640px}
+#prices .p-txt{font-size:14px;line-height:1.7;max-width:460px;margin:18px 0 30px;font-weight:400;color:#3d3a35}
+#prices .btn{max-width:420px}
+.dark .btn.solid{background:var(--bone);color:var(--ink)}
+
+/* 6 contacts: dust */
+#contact{min-height:90svh;display:flex;flex-direction:column}
+#contact .in{flex:1;display:flex;flex-direction:column;width:100%}
+.c-word{--fs:clamp(84px,24vw,200px);font-size:var(--fs);height:calc(var(--fs)*3.45);margin-bottom:24px}
+#contact p{font-size:14px;line-height:1.7;max-width:420px;margin:0 0 30px;font-weight:400}
+.c-btns{display:grid;gap:10px;margin-top:auto}
+footer{display:flex;justify-content:space-between;margin-top:40px;color:#5b5750}
+
+@media (min-width:860px){
+  :root{--pad:48px}
+  .svc{grid-template-columns:110px 1fr 1.2fr}.svc .num{grid-row:auto}
+  .c-btns{grid-template-columns:1fr 1fr}
+  #top .btn{max-width:420px}
+}
+</style>
+</head>
+<body>
+
+<header><a href="#top" class="cap">Ramil</a><button class="cap" onclick="nav.classList.add('open')">Menu</button></header>
+<nav id="nav" onclick="if(event.target.tagName==='A'||event.target.classList.contains('x'))this.classList.remove('open')">
+  <button class="cap x" style="background:none;border:0;color:inherit;cursor:pointer">Close</button>
+  <a href="#services">Услуги</a><a href="#how">Как работаем</a><a href="#about">Обо мне</a><a href="#cases">Кейсы</a><a href="#prices">Цены</a><a href="#contact">Контакты</a>
+</nav>
+
+<section id="top" class="dust">
+  <div class="in">
+    <div style="position:relative">
+      <div class="tall hero-word">Кон<br>тент</div>
+      <div class="hero-list">Монтаж<br>Сценарии<br>Карусели<br>Воронки<br>ИИ-агенты</div>
+    </div>
+    <div class="hero-bottom">
+      <h1>Контент и ИИ для вашего Instagram под ключ</h1>
+      <p>Монтаж, сценарии, карусели и автоворонки. Вы снимаетесь, остальное делаю я с командой и ИИ-агентами.</p>
+      <a class="btn solid" href="https://t.me/disapointmeee" target="_blank" rel="noopener">Написать в Telegram</a>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="dark">
+  <div class="in">
+    <h2>Услуги</h2>
+    <div class="svc"><div class="tall num">01</div><h3>Монтаж видео</h3><p>Reels, ролики для YouTube, видеоуроки для вашего курса. Из ваших исходников делаем динамичные видео: нарезка, субтитры, музыка, цепляющее начало.</p></div>
+    <div class="svc"><div class="tall num">02</div><h3>Хуки и тексты для видео</h3><p>Пишу темы, хуки и тексты под вашу нишу, вам остаётся прочитать их на камеру. Хук ставлю на видео в вашем фирменном стиле.</p></div>
+    <div class="svc"><div class="tall num">03</div><h3>Карусели</h3><p>Темы, тексты и дизайн каруселей, которые сохраняют и пересылают.</p></div>
+    <div class="svc"><div class="tall num">04</div><h3>Контент-завод под ключ</h3><p>Каждый день готовые Reels и карусели с подписями. Вы снимаете один раз, а публикуете весь месяц.</p></div>
+    <div class="svc"><div class="tall num">05</div><h3>ИИ-фото и ИИ-видео</h3><p>Фотосессия без фотографа, ролики с вашим лицом в любой локации, трендовые ИИ-форматы.</p></div>
+    <div class="svc"><div class="tall num">06</div><h3>Автоворонки в Instagram и Telegram</h3><p>Человек пишет слово в комментарии, получает подарок в директ и попадает в ваш Telegram. Заявки приходят, даже пока вы спите.</p></div>
+    <div class="svc"><div class="tall num">07</div><h3>ИИ-ассистент для бизнеса</h3><p>Бот в Telegram, который отвечает клиентам, принимает заявки и ведёт ваш канал.</p></div>
+    <div class="svc"><div class="tall num">08</div><h3>Свой продукт и продажи</h3><p>Поможем упаковать вашу экспертизу в продукт, подключить оплату и настроить продажи. Контент выходит, работает и продаёт сам, а вы получаете доход без ручных продаж.</p></div>
+    <div class="svc"><div class="tall num">09</div><h3>Обучение</h3><p>Научу набирать аудиторию в Instagram и самому работать с ИИ.</p></div>
+  </div>
+</section>
+
+<section id="how" class="dust">
+  <div class="in">
+    <h2>Как работаем</h2>
+    <div class="step"><div class="tall num">01</div><p>Вы пишете мне в Telegram и рассказываете о задаче.</p></div>
+    <div class="step"><div class="tall num">02</div><p>Созваниваемся или вы заполняете короткий бриф: ниша, аудитория, цели.</p></div>
+    <div class="step"><div class="tall num">03</div><p>Я делаю первую партию и присылаю на согласование.</p></div>
+    <div class="step"><div class="tall num">04</div><p>Вносим правки и выходим на регулярный ритм.</p></div>
+  </div>
+</section>
+
+<section id="about" class="dark">
+  <div class="vname" aria-hidden="true">RAMIL</div>
+  <div class="in">
+    <h2>Обо мне</h2>
+    <p class="lead">Меня зовут Рамиль. Больше пяти лет я работал бизнес-ассистентом в разных компаниях, в том числе международных, поэтому хорошо знаю, что нужно бизнесу.</p>
+    <p class="txt">Около года занимаюсь продвижением в Instagram. Свою страницу @prosto___rama завёл недавно и развиваю её теми же инструментами, что использую для клиентов. Мы с командой монтажёров и ИИ-агентами делаем контент для экспертов: психологов, коучей, риелторов, преподавателей йоги, специалистов по здоровью и финансам. Собираем для клиентов воронки под их продукты.</p>
+    <div class="why">
+      <div><b>Быстро</b>Рутину берёт на себя ИИ, поэтому первую партию вы получаете за 1-2 дня.</div>
+      <div><b>Под ключ</b>Не нужно искать отдельно сценариста, монтажёра и дизайнера.</div>
+      <div><b>В вашем стиле</b>Работаю в ваших шрифтах, цветах и шаблонах.</div>
+      <div><b>На связи</b>Всё обсуждаем в Telegram, без долгих созвонов.</div>
+    </div>
+  </div>
+</section>
+
+<section id="cases" class="dust">
+  <div class="in">
+    <h2>Кейсы</h2>
+    <div class="tall k-word">Кей<br>сы</div>
+    <div class="case">
+      <h3>Андрей Колотнев</h3>
+      <p class="niche">Тренер по боксу, Москва. Ведём 5 месяцев · <a href="https://instagram.com/andrey_kolotnev" target="_blank" rel="noopener">@andrey_kolotnev</a></p>
+      <div class="stats"><div class="stat"><div class="big">8,3 тыс.<i>→</i>33,9 тыс.</div><div class="lab">подписчиков</div></div><div class="stat"><div class="big">738<i>→</i>6,3 млн</div><div class="lab">просмотров за 30 дней</div></div></div>
+      <p class="res">Привели клиентов на офлайн-тренировки и запустили продажи его офлайн-продукта.</p>
+      <div class="shots"><figure><img src="img/cases/andrey_before.jpg" alt="Было: Андрей Колотнев"><figcaption>Было</figcaption></figure><figure><img src="img/cases/andrey_after.jpg" alt="Стало: Андрей Колотнев"><figcaption>Стало</figcaption></figure></div>
+    </div>
+    <div class="case">
+      <h3>Екатерина Пилипенко</h3>
+      <p class="niche">Психолог, гештальт-терапевт. Ведём 3 месяца · <a href="https://instagram.com/ekaterina___pilipenko" target="_blank" rel="noopener">@ekaterina___pilipenko</a></p>
+      <div class="stats"><div class="stat"><div class="big">13,6 тыс.<i>→</i>24,6 тыс.</div><div class="lab">подписчиков</div></div><div class="stat"><div class="big">20,4 тыс.<i>→</i>8,1 млн</div><div class="lab">просмотров за 30 дней</div></div></div>
+      <p class="res">Привели много клиентов и запросы на психологическое сопровождение.</p>
+      <div class="shots"><figure><img src="img/cases/katya_before.jpg" alt="Было: Екатерина Пилипенко"><figcaption>Было</figcaption></figure><figure><img src="img/cases/katya_after.jpg" alt="Стало: Екатерина Пилипенко"><figcaption>Стало</figcaption></figure></div>
+    </div>
+    <div class="case">
+      <h3>Антон Джанбеков</h3>
+      <p class="niche">Психолог, телесно-эмоциональная терапия · <a href="https://instagram.com/anton_dzhanbekov" target="_blank" rel="noopener">@anton_dzhanbekov</a></p>
+      <div class="stats"><div class="stat"><div class="big">40 тыс.<i>→</i>60,6 тыс.</div><div class="lab">подписчиков</div></div></div>
+      <p class="res">Построили воронку и привели много клиентов.</p>
+      <div class="shots"><figure><img src="img/cases/anton_before.jpg" alt="Было: Антон Джанбеков"><figcaption>Было</figcaption></figure><figure><img src="img/cases/anton_after.jpg" alt="Стало: Антон Джанбеков"><figcaption>Стало</figcaption></figure></div>
+    </div>
+    <div class="case">
+      <h3>Лилия Данилова</h3>
+      <p class="niche">Геммолог и ювелир, США и Россия · <a href="https://instagram.com/danilovadiamonds1" target="_blank" rel="noopener">@danilovadiamonds1</a></p>
+      <div class="stats"><div class="stat"><div class="big">0<i>→</i>22,2 тыс.</div><div class="lab">подписчиков на новом аккаунте за 4 месяца</div></div><div class="stat"><div class="big">333 тыс.<i>→</i>366 тыс.</div><div class="lab">подписчиков на основном за 5 месяцев</div></div></div>
+      <p class="res">Новый аккаунт запустили с полного нуля, основной продолжает расти.</p>
+      <div class="shots"><figure><img src="img/cases/liliya2_after.jpg" alt="Новый аккаунт сейчас: Лилия Данилова"><figcaption>Новый аккаунт сейчас</figcaption></figure><figure><img src="img/cases/liliya_after.jpg" alt="Основной сейчас: Лилия Данилова"><figcaption>Основной сейчас</figcaption></figure></div>
+    </div>
+    <div class="works">
+      <h3 class="w-h">Наши работы</h3>
+      <p class="w-cap">Видео</p>
+      <div class="reel-row">
+        <figure><video data-src="video/reel1.mp4" poster="video/reel1.jpg" muted loop playsinline preload="none"></video><figcaption>Reels</figcaption></figure>
+        <figure><video data-src="video/reel2.mp4" poster="video/reel2.jpg" muted loop playsinline preload="none"></video><figcaption>Reels</figcaption></figure>
+        <figure><video data-src="video/salad.mp4" poster="video/salad.jpg" muted loop playsinline preload="none"></video><figcaption>Reels</figcaption></figure>
+        <figure><video data-src="video/v5614.mp4" poster="video/v5614.jpg" muted loop playsinline preload="none"></video><figcaption>Reels</figcaption></figure>
+        <figure><video data-src="video/beforeafter.mp4" poster="video/beforeafter.jpg" muted loop playsinline preload="none"></video><figcaption>Монтаж: до и после</figcaption></figure>
+        <figure><video data-src="video/live.mp4" poster="video/live.jpg" muted loop playsinline preload="none"></video><figcaption>Видео вживую</figcaption></figure>
+      </div>
+      <p class="w-cap">ИИ-генерация</p>
+      <div class="reel-row">
+        <figure><video data-src="video/pet.mp4" poster="video/pet.jpg" muted loop playsinline preload="none"></video><figcaption>Генерация для ваших питомцев или для вас</figcaption></figure>
+        <figure><video data-src="video/model.mp4" poster="video/model.jpg" muted loop playsinline preload="none"></video><figcaption>Генерация для вашего бизнеса</figcaption></figure>
+      </div>
+      <p class="w-cap">Анимационное видео</p>
+      <div class="anim"><video data-src="video/flower.mp4" poster="video/flower.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="reel-row" style="margin-top:10px">
+        <figure><video data-src="video/v1.mp4" poster="video/v1.jpg" muted loop playsinline preload="none"></video><figcaption>Моушн-дизайн для приложения</figcaption></figure>
+      </div>
+      <p class="w-cap">Анимация логотипов</p>
+      <div class="logo-row">
+        <video data-src="video/logo1.mp4" poster="video/logo1.jpg" muted loop playsinline preload="none"></video>
+        <video data-src="video/logo2.mp4" poster="video/logo2.jpg" muted loop playsinline preload="none"></video>
+        <video data-src="video/logo3.mp4" poster="video/logo3.jpg" muted loop playsinline preload="none"></video>
+      </div>
+      <p class="w-tip">Нажмите на видео, чтобы включить звук</p>
+    </div>
+    <p class="k-note">Это лишь малая часть наших кейсов. Остальные под NDA, их мы раскрывать не можем.</p>
+  </div>
+</section>
+
+<section id="prices" class="dark">
+  <div class="in">
+    <h2>Цены</h2>
+    <div class="tall p-word">Сколь<br>ко?</div>
+    <p class="p-lead">Я не буду писать «Reels от 300 ₽»,<br>чтобы потом назвать полторы тысячи.</p>
+    <p class="p-txt">Поэтому цен на сайте нет. И звёздочек с мелким шрифтом тоже. Стоимость зависит от вашей задачи: напишите, что нужно, и я назову точную цифру. Контакт ниже.</p>
+    <a class="btn solid" href="https://t.me/disapointmeee" target="_blank" rel="noopener">Узнать цену в Telegram</a>
+  </div>
+</section>
+
+<section id="contact" class="dust">
+  <div class="in">
+    <h2>Контакты</h2>
+    <div class="tall c-word">Обсу<br>дим?</div>
+    <p>Напишите мне в Telegram, WhatsApp или на почту, расскажите о задаче, и я предложу, с чего начать.<br>ramilkaidrisov@gmail.com</p>
+    <div class="c-btns">
+      <a class="btn solid" href="https://t.me/disapointmeee" target="_blank" rel="noopener">Telegram</a>
+      <a class="btn line" href="https://instagram.com/prosto___rama" target="_blank" rel="noopener">Instagram</a>
+      <a class="btn line" href="https://wa.me/598007845" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn line" href="mailto:ramilkaidrisov@gmail.com">Почта</a>
+    </div>
+    <footer class="cap"><span>Ramil</span><span>2026</span></footer>
+  </div>
+</section>
+
+<script>
+// load and play each video only when it scrolls into view
+const io=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;
+  if(e.isIntersecting){if(!v.src)v.src=v.dataset.src;v.play().catch(()=>{})}else v.pause()}),{rootMargin:'200px 0px'});
+document.querySelectorAll('video[data-src]').forEach(v=>io.observe(v));
+document.querySelectorAll('.reel-row video,.anim video').forEach(v=>v.addEventListener('click',()=>{
+  document.querySelectorAll('.reel-row video,.anim video').forEach(o=>{if(o!==v)o.muted=true});
+  v.muted=!v.muted;if(!v.muted){v.currentTime=0;v.play()}}));
+</script>
+</body>
+</html>
