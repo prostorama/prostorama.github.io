@@ -31,7 +31,8 @@ section{position:relative;overflow:hidden;padding:110px var(--pad) 90px}
 h2{font-weight:300;font-size:13px;letter-spacing:8px;text-transform:uppercase;margin-bottom:56px;display:flex;align-items:center;gap:16px}
 h2:before{content:'';width:40px;height:1px;background:currentColor}
 /* stretched condensed type, like long silhouettes */
-.tall{font-family:Oswald;font-weight:700;text-transform:uppercase;line-height:.86;transform:scaleY(1.9);transform-origin:top left;letter-spacing:-2px}
+/* scaleY stretches the word over the buttons below without moving them; let taps pass through */
+.tall{pointer-events:none;font-family:Oswald;font-weight:700;text-transform:uppercase;line-height:.86;transform:scaleY(1.9);transform-origin:top left;letter-spacing:-2px}
 
 /* header */
 header{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:20px var(--pad);mix-blend-mode:difference;color:#fff}
