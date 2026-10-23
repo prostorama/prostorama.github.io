@@ -35,7 +35,10 @@ body:after{content:'';position:fixed;inset:-30vh 0;pointer-events:none;z-index:5
 .dust{background:var(--dust);color:var(--ink)}
 .dark{background:var(--ink);color:var(--bone)}
 section{position:relative;overflow:hidden;padding:110px var(--pad) 90px}
-.in{max-width:1040px;margin:0 auto;position:relative;z-index:2}
+.in{max-width:1040px;margin:0 auto;position:relative}
+#about .in{z-index:2}
+/* media sits above the grain overlay so photos and videos stay clean */
+video,.shots img{position:relative;z-index:51}
 .btn{display:block;text-align:center;padding:19px;font-size:11px;letter-spacing:7px;text-transform:uppercase;font-weight:400;transition:opacity .2s}
 .btn:hover{opacity:.75}
 .dust .btn.solid{background:var(--ink);color:var(--dust)}
@@ -48,10 +51,10 @@ h2:before{content:'';width:40px;height:1px;background:currentColor}
 .tall{pointer-events:none;font-family:Oswald;font-weight:700;text-transform:uppercase;line-height:.86;transform:scaleY(1.9);transform-origin:top left;letter-spacing:-2px}
 
 /* header */
-header{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:20px var(--pad);mix-blend-mode:difference;color:#fff}
+header{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:space-between;align-items:center;padding:20px var(--pad);mix-blend-mode:difference;color:#fff}
 .logo svg{display:block;height:38px;width:auto}
 header button{background:none;border:0;color:inherit;font:inherit;cursor:pointer}
-nav{position:fixed;inset:0;z-index:45;background:var(--ink);color:var(--bone);display:flex;flex-direction:column;justify-content:center;padding:0 var(--pad);gap:26px;opacity:0;pointer-events:none;transition:opacity .3s}
+nav{position:fixed;inset:0;z-index:65;background:var(--ink);color:var(--bone);display:flex;flex-direction:column;justify-content:center;padding:0 var(--pad);gap:26px;opacity:0;pointer-events:none;transition:opacity .3s}
 nav.open{opacity:1;pointer-events:auto}
 nav a{font-family:Oswald;font-weight:200;font-size:44px;text-transform:uppercase;letter-spacing:2px}
 nav .x{position:absolute;top:20px;right:var(--pad)}
@@ -89,7 +92,7 @@ nav .x{position:absolute;top:20px;right:var(--pad)}
 .why b{display:block;font-weight:400;color:var(--bone);letter-spacing:4px;text-transform:uppercase;font-size:12px;margin-bottom:6px}
 
 /* cases: dust */
-.k-word{--fs:clamp(84px,24vw,200px);font-size:var(--fs);height:calc(var(--fs)*3.45);margin-bottom:10px}
+.k-word{--fs:clamp(84px,24vw,200px);font-size:var(--fs);height:calc(var(--fs)*3.45);margin-bottom:56px}
 .case{border-top:1px solid var(--ink);padding:34px 0 40px}
 .case:last-child{border-bottom:1px solid var(--ink)}
 .case h3{font-weight:400;font-size:15px;letter-spacing:4px;text-transform:uppercase}
@@ -99,28 +102,28 @@ nav .x{position:absolute;top:20px;right:var(--pad)}
 .stat .big i{font-style:normal;font-weight:200;margin:0 6px}
 .stat .lab{font-size:10.5px;letter-spacing:3px;text-transform:uppercase;margin-top:6px;color:#3d3a35}
 .res{font-size:14px;line-height:1.7;font-weight:400;margin-bottom:22px;max-width:560px}
-.shots{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
-.shots figure{flex:0 0 78%;max-width:340px;scroll-snap-align:start}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.shots figure{margin:0;min-width:0}
 .shots img{width:100%;display:block;border:1px solid var(--ink)}
 .shots figcaption{font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-top:8px;color:#3d3a35}
 .works{margin-top:60px}
 .w-h{font-weight:400;font-size:15px;letter-spacing:4px;text-transform:uppercase;margin-bottom:24px}
 .w-cap{font-size:10.5px;letter-spacing:3px;text-transform:uppercase;color:#3d3a35;margin:22px 0 12px}
-.reel-row{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
-.reel-row figure{flex:0 0 62%;max-width:300px;scroll-snap-align:start}
+.reel-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.reel-row figure{margin:0;min-width:0}
 .reel-row video{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;background:#000;cursor:pointer}
 .reel-row figcaption{font-size:10px;letter-spacing:3px;line-height:1.6;text-transform:uppercase;margin-top:8px;color:#3d3a35}
 .anim video{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000;cursor:pointer}
 .logo-row{display:grid;gap:10px}
 .logo-row video{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000}
 .w-tip{font-size:11px;color:#3d3a35;margin-top:14px}
-@media (min-width:860px){.logo-row{grid-template-columns:repeat(3,1fr)}.reel-row figure{flex-basis:260px}}
+@media (min-width:860px){.logo-row{grid-template-columns:repeat(3,1fr)}.reel-row{grid-template-columns:repeat(3,1fr)}}
 .k-note{font-size:13px;line-height:1.7;margin-top:30px;max-width:520px;color:#3d3a35;font-style:italic}
 #prices.dark .p-txt{color:var(--ash)}
-@media (min-width:860px){.stats{grid-template-columns:1fr 1fr}.shots figure{flex-basis:300px}}
+@media (min-width:860px){.stats{grid-template-columns:1fr 1fr}.shots{max-width:720px}}
 
 /* 5 prices: dust */
-.p-word{--fs:clamp(84px,24vw,200px);font-size:var(--fs);height:calc(var(--fs)*3.45);margin-bottom:24px}
+.p-word{--fs:clamp(84px,24vw,200px);font-size:var(--fs);height:calc(var(--fs)*3.45);margin-bottom:56px}
 #prices .p-lead{font-size:clamp(20px,3vw,30px);line-height:1.4;font-weight:300;max-width:640px}
 #prices .p-txt{font-size:14px;line-height:1.7;max-width:460px;margin:18px 0 30px;font-weight:400;color:#3d3a35}
 #prices .btn{max-width:420px}
@@ -129,7 +132,7 @@ nav .x{position:absolute;top:20px;right:var(--pad)}
 /* 6 contacts: dust */
 #contact{min-height:90svh;display:flex;flex-direction:column}
 #contact .in{flex:1;display:flex;flex-direction:column;width:100%}
-.c-word{--fs:clamp(84px,24vw,200px);font-size:var(--fs);height:calc(var(--fs)*3.45);margin-bottom:24px}
+.c-word{--fs:clamp(84px,24vw,200px);font-size:var(--fs);height:calc(var(--fs)*3.45);margin-bottom:56px}
 #contact p{font-size:14px;line-height:1.7;max-width:420px;margin:0 0 30px;font-weight:400}
 .c-btns{display:grid;gap:10px;margin-top:auto}
 footer{display:flex;justify-content:space-between;margin-top:40px;color:#5b5750}
