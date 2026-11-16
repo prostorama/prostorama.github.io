@@ -149,7 +149,7 @@ footer{display:flex;justify-content:space-between;margin-top:40px;color:#5b5750}
   #top .btn{max-width:420px}
 }
 
-/* motion (16.11): hero letter rise, marquee band, scroll reveal, card spotlight; all off for reduced motion */
+/* motion (16.11): hero letter rise, marquee band, scroll reveal, card spotlight (kept on with iOS Reduce Motion by owner's choice) */
 .hero-word .ch{display:inline-block;opacity:0;transform:translateY(.35em);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
 .hero-list span{display:block;opacity:0;filter:blur(8px);transition:opacity .8s,filter .8s}
 .ready .hero-word .ch{opacity:1;transform:none}
@@ -164,7 +164,6 @@ footer{display:flex;justify-content:space-between;margin-top:40px;color:#5b5750}
 .svc:before{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
   background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(191,184,173,.10),transparent 70%)}
 @media (hover:hover){.svc:hover:before{opacity:1}}
-@media (prefers-reduced-motion:reduce){.hero-word .ch,.hero-list span,.rv{opacity:1;transform:none;filter:none;transition:none}.band .track{animation:none}}
 </style>
 </head>
 <body>
@@ -336,7 +335,7 @@ document.querySelectorAll('.reel-row video,.anim video').forEach(v=>v.addEventLi
 </script>
 <script>
 (function(){
-  var rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  
   // hero: split the big word into letters and the side list into lines
   var hw = document.querySelector('.hero-word'), i = 0;
   if (hw) hw.innerHTML = hw.innerHTML.split(/(<br>)/).map(function(p){
@@ -355,7 +354,6 @@ document.querySelectorAll('.reel-row video,.anim video').forEach(v=>v.addEventLi
     var m = n.data.match(/^(\s*)(\d+)(?:([,.])(\d+))?(.*)$/); if (!m) return;
     var whole = +m[2], dec = m[4] || '', sep = m[3] || '', val = whole + (dec ? +('0.' + dec) : 0);
     var fmt = function(x){ return m[1] + (dec ? x.toFixed(dec.length).replace('.', sep) : Math.round(x)) + m[5]; };
-    if (rm) return;
     n.data = fmt(0);
     var o = new IntersectionObserver(function(es){ if (!es[0].isIntersecting) return; o.disconnect();
       var t0 = performance.now(), d = 1600;
