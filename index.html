@@ -164,6 +164,12 @@ footer{display:flex;justify-content:space-between;margin-top:40px;color:#5b5750}
 .svc:before{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
   background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(191,184,173,.10),transparent 70%)}
 @media (hover:hover){.svc:hover:before{opacity:1}}
+
+/* sticky contact button on phones: hidden on the first screen and at the contacts */
+.fab{position:fixed;left:var(--pad);right:var(--pad);bottom:calc(14px + env(safe-area-inset-bottom));z-index:62;background:var(--ink);color:var(--bone);border:1px solid var(--dust);
+  transform:translateY(140%);transition:transform .45s cubic-bezier(.2,.7,.2,1);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.fab.show{transform:none}
+@media (min-width:900px){.fab{display:none}}
 </style>
 </head>
 <body>
@@ -365,6 +371,14 @@ document.querySelectorAll('.reel-row video,.anim video').forEach(v=>v.addEventLi
   document.querySelectorAll('.svc').forEach(function(c){
     c.addEventListener('pointermove', function(e){ var r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px'); });
   });
+})();
+</script>
+<a class="btn fab" href="https://t.me/disapointmeee" target="_blank" rel="noopener">Обсудить проект</a>
+<script>
+(function(){
+  var f = document.querySelector('.fab'), top = document.getElementById('top'), ct = document.getElementById('contact'), a = true, b = false;
+  var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.target === top) a = e.isIntersecting; else b = e.isIntersecting; }); f.classList.toggle('show', !a && !b); });
+  io.observe(top); if (ct) io.observe(ct);
 })();
 </script>
 </body>
