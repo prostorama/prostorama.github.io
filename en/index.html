@@ -150,6 +150,23 @@ footer{display:flex;justify-content:space-between;margin-top:40px;color:#5b5750}
   .c-btns{grid-template-columns:1fr 1fr}
   #top .btn{max-width:420px}
 }
+
+/* motion (16.11): hero letter rise, marquee band, scroll reveal, card spotlight; all off for reduced motion */
+.hero-word .ch{display:inline-block;opacity:0;transform:translateY(.35em);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.hero-list span{display:block;opacity:0;filter:blur(8px);transition:opacity .8s,filter .8s}
+.ready .hero-word .ch{opacity:1;transform:none}
+.ready .hero-list span{opacity:1;filter:none}
+.band{background:var(--ink);color:var(--dust);overflow:hidden;padding:18px 0;border-top:1px solid #2a2927;border-bottom:1px solid #2a2927}
+.band .track{display:flex;width:max-content;animation:band 28s linear infinite}
+.band span{font-family:Oswald;font-weight:200;font-size:26px;letter-spacing:4px;text-transform:uppercase;white-space:nowrap;padding-right:28px}
+@keyframes band{to{transform:translateX(-50%)}}
+.rv{opacity:0;transform:translateY(26px);filter:blur(6px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1),filter .9s}
+.rv.on{opacity:1;transform:none;filter:none}
+.svc{position:relative}
+.svc:before{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(191,184,173,.10),transparent 70%)}
+@media (hover:hover){.svc:hover:before{opacity:1}}
+@media (prefers-reduced-motion:reduce){.hero-word .ch,.hero-list span,.rv{opacity:1;transform:none;filter:none;transition:none}.band .track{animation:none}}
 </style>
 </head>
 <body>
@@ -174,6 +191,8 @@ footer{display:flex;justify-content:space-between;margin-top:40px;color:#5b5750}
     </div>
   </div>
 </section>
+
+<div class="band" aria-hidden="true"><div class="track"><span>Editing · Scripts · Carousels · Funnels · AI agents ·</span><span>Editing · Scripts · Carousels · Funnels · AI agents ·</span><span>Editing · Scripts · Carousels · Funnels · AI agents ·</span><span>Editing · Scripts · Carousels · Funnels · AI agents ·</span><span>Editing · Scripts · Carousels · Funnels · AI agents ·</span><span>Editing · Scripts · Carousels · Funnels · AI agents ·</span></div></div>
 
 <section id="services" class="dark">
   <div class="in">
@@ -315,6 +334,41 @@ document.querySelectorAll('video[data-src]').forEach(v=>io.observe(v));
 document.querySelectorAll('.reel-row video,.anim video').forEach(v=>v.addEventListener('click',()=>{
   document.querySelectorAll('.reel-row video,.anim video').forEach(o=>{if(o!==v)o.muted=true});
   v.muted=!v.muted;if(!v.muted){v.currentTime=0;v.play()}}));
+</script>
+<script>
+(function(){
+  var rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // hero: split the big word into letters and the side list into lines
+  var hw = document.querySelector('.hero-word'), i = 0;
+  if (hw) hw.innerHTML = hw.innerHTML.split(/(<br>)/).map(function(p){
+    return p === '<br>' ? p : p.split('').map(function(c){ return '<span class="ch" style="transition-delay:' + (0.06 * i++) + 's">' + c + '</span>'; }).join('');
+  }).join('');
+  var hl = document.querySelector('.hero-list');
+  if (hl) hl.innerHTML = hl.innerHTML.split('<br>').map(function(t, k){ return '<span style="transition-delay:' + (0.5 + 0.12 * k) + 's">' + t + '</span>'; }).join('');
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ document.body.classList.add('ready'); }); });
+  // scroll reveal
+  var els = document.querySelectorAll('section:not(#top) h2, .svc, .step, .why > div, .case, .lead, .txt');
+  var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } }); }, {rootMargin: '0px 0px -8% 0px'});
+  els.forEach(function(el){ el.classList.add('rv'); io.observe(el); });
+  // case numbers: count up the "after" value
+  document.querySelectorAll('.stat .big').forEach(function(b){
+    var n = b.lastChild; if (!n || n.nodeType !== 3) return;
+    var m = n.data.match(/^(\s*)(\d+)(?:([,.])(\d+))?(.*)$/); if (!m) return;
+    var whole = +m[2], dec = m[4] || '', sep = m[3] || '', val = whole + (dec ? +('0.' + dec) : 0);
+    var fmt = function(x){ return m[1] + (dec ? x.toFixed(dec.length).replace('.', sep) : Math.round(x)) + m[5]; };
+    if (rm) return;
+    n.data = fmt(0);
+    var o = new IntersectionObserver(function(es){ if (!es[0].isIntersecting) return; o.disconnect();
+      var t0 = performance.now(), d = 1600;
+      (function step(t){ var k = Math.min(1, (t - t0) / d); n.data = fmt(val * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); })(t0);
+    }, {threshold: .6});
+    o.observe(b);
+  });
+  // service cards: light follows the cursor
+  document.querySelectorAll('.svc').forEach(function(c){
+    c.addEventListener('pointermove', function(e){ var r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px'); });
+  });
+})();
 </script>
 </body>
 </html>
